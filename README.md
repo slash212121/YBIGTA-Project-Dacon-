@@ -44,10 +44,15 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 총 19종류의 천체 유형으로 분류된다
 
 -psfMag(Point spread function magnitudes) : 먼 천체를 한 점으로 가정하여 측정한 빛의 밝기
+
 -fiberMag(Fiber magnitudes) : 3인치 지름의 광섬유를 사용하여 광스펙트럼을 측정합니다. 광섬유를 통과하는 빛의 밝기
+
 -petroMag(Petrosian Magnitudes) : 은하처럼 뚜렷한 표면이 없는 천체에서는 빛의 밝기를 측정하기 어렵다. 천체의 위치와 거리에 상관없이 빛의 밝기를 비교하기 위한 수치
+
 -modelMag(Model magnitudes) : 천체 중심으로부터 특정 거리의 밝기
+
 -FiberID:관측에 사용된 광섬유의 구분자
+
 -참고: u(ultraviolet), g(green), r(red), i,z(very-near-infrared)
 
 
