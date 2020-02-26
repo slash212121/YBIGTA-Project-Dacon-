@@ -13,10 +13,15 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 ## 목차(진행과정)
 <br>
 1. 변수의 의미 파악
-2. Training Data 시각화 
+
+2. Training Data 시각화
+
 3. Training Data 전처리
+
 4. Training Data 샘플링
+
 5. 적합한 모델 찾기(XGBoost, CatBoost, RandomForest, LightGBM)
+
 6. 그리드 서치
 
 
