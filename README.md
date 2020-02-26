@@ -136,4 +136,10 @@ for col in features :
 
 ![](https://github.com/sehyeona/ybigta-project/blob/master/%EB%B3%80%EC%88%98%EB%B6%84%ED%8F%AC20.png)
 
+분포 확인 결과
 
+1. fiberMag_u 와 psfMag_u 가 두개의 분포형태가 거의 동일하다고 볼 수 있음
+
+2. 대부분의 분포들이 평균에서 매우 떨어져있는 아웃라이어를 가지고 있음을 알 수 있음
+
+3. 주로 모든 아웃라이어들은 양방향으로 분포해있기 보다 한방향으로 치우쳐서 분포해 있음을 알 수 있음
