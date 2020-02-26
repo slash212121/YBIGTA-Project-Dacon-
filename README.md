@@ -22,7 +22,8 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 
 5. 적합한 모델 찾기(XGBoost, CatBoost, RandomForest, LightGBM)
 
-6. 그리드 서치 
+6. 그리드 서치
+
 <br>
 <br>
 <br>
@@ -55,6 +56,29 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 -FiberID:관측에 사용된 광섬유의 구분자
 
 -참고: u(ultraviolet), g(green), r(red), i,z(very-near-infrared)
+
+## 2. Training Data 시각화
+
+```
+  plt.figure(figsize=(12,8))
+  ax = sns.countplot(y="type", data=df)
+  plt.title('Distribution of orb types\n')
+  plt.ylabel('Number of type\n')
+
+  # Make twin axis
+  ax2=ax.twiny()
+
+  # Switch so count axis is on right, frequency on left
+  ax2.xaxis.tick_top()
+  ax.xaxis.tick_bottom()
+
+  # Also switch the labels over
+  ax.xaxis.set_label_position('bottom')
+  ax2.xaxis.set_label_position('top')
+
+  ax2.set_xlabel('Frequency [%]')
+```
+
 
 
 
