@@ -22,6 +22,20 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 
 5. 적합한 모델 찾기(XGBoost, CatBoost, RandomForest, LightGBM)
 
-6. 그리드 서치
+6. 그리드 서치 
+<br>
+<br>
+<br>
+## 1. 변수의 의미 파악
+
+-type: 천체 유형으로 예측해야 하는 변수(종속변수) 
+
+  train=pd.read_csv('/content/gdrive/My Drive/train.csv')
+test=pd.read_csv('/content/gdrive/My Drive/test.csv')
+train['type'].unique()
+
+
+
+
 
 
