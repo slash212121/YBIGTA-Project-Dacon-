@@ -79,6 +79,6 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
   ax2.set_xlabel('Frequency [%]')
 ```
 
-
+![](https://github.com/sehyeona/ybigta-project/blob/master/visualization1.png)
 
 
