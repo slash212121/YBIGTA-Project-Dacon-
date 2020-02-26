@@ -2,7 +2,7 @@
 <br>
 ML 2팀: 노시영, 양정열, 안세현, 최정윤, 박솔희
 
-![](https://en.wikipedia.org/wiki/Galaxy#/media/File:NGC_4414_(NASA-med).jpg)
+![](https://github.com/sehyeona/ybigta-project/blob/master/Title.jpg)
 
 
 ## 프로젝트의 목적 및 의의
