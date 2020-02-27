@@ -144,4 +144,16 @@ for col in features :
 
 3. 주로 모든 아웃라이어들은 양방향으로 분포해있기 보다 한방향으로 치우쳐서 분포해 있음을 알 수 있음
 
--
+-천체타입에 의한 변수간의 상관관계
+
+```
+for x in types:    
+    plt.figure(figsize=(12,8))
+    ax =  sns.heatmap(df[df['type'] == x].corr(method='pearson'), annot = True,   
+                fmt = '.2f',linewidths = 1, cmap="summer")
+    buttom, top = ax.get_ylim()
+    ax.set_ylim(buttom + 0.5, top - 0.5)
+    plt.title("Correlations when type is %s"%x)
+```
+
+
