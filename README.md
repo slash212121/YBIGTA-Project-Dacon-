@@ -252,6 +252,8 @@ def scaling_func(df, scaler) :
 
 앞서 시각화 파트에서 천체 type 별 데이터 개수를 비교해보았을 때 majority class와 minority class의 비율 차이가 극심한 것을 확인하였다. 때문에 oversampling을 통해 다수 클래스를 기준으로 소수 클래스 데이터를 증가시켜 균형을 맞춤으로써 데이터 손실을 줄이고자 하였다. 
 
+
+
 -oversampling
 
 oversampling 기법은 크게 3가지로 나뉜다.
