@@ -29,7 +29,7 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 
 ## 1. 변수의 의미 파악
 
-> type: 천체 유형으로 예측해야 하는 변수(종속변수) 
+-type: 천체 유형으로 예측해야 하는 변수(종속변수) 
 ```
   train=pd.read_csv('/content/gdrive/My Drive/train.csv')
   test=pd.read_csv('/content/gdrive/My Drive/test.csv')
@@ -58,7 +58,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ## 2. Training Data 시각화
 
-> type의 출현 빈도 파악
+-type의 출현 빈도 파악
 
 ```
   plt.figure(figsize=(12,8))
@@ -82,7 +82,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ![](https://github.com/sehyeona/ybigta-project/blob/master/visualization1.png)
 
-> 변수(feature)들의 분포
+-변수(feature)들의 분포
 
 ```
 
@@ -146,7 +146,7 @@ for col in features :
 
 <br>
 
-> 천체타입에 의한 변수간의 상관관계
+-천체타입에 의한 변수간의 상관관계
 
 ```
 for x in types:    
@@ -206,11 +206,11 @@ for x in types:
 
 ## 3. Training Data 전처리
 
-> 스케일링
+-스케일링
 
 변수들간의 스케일이 대부분 맞기는 하지만 어느정도 아웃라이어가 존재하기도 하고 해보기 전까지 모르기 때문에 아래의 4가지 방법을 이용하여 스케일링 하였다
 
-> 종류
+종류
 
 -standardscaler : 정규분포 이용
 
@@ -223,6 +223,8 @@ for x in types:
 모든 스케일러는 sklearn.preprocessing 안에 각자 이름으로 들어있음
 
 ```
+#training data를 각자 스케일링 
+
 def scaling_func(df, scaler) :
     '''
     param : dataframe / scaler object
@@ -241,23 +243,155 @@ def scaling_func(df, scaler) :
     
 ```
 
-## 4. Training Data 샘플링
+```
+#test data 스케일링
+def test_scaling_func(df, scaler) :
+    # type과 id를 제외하고 학습
+    data_for_scaling = df.drop(['id', 'fiberID'], axis = 1)
+    scaler.fit(data_for_scaling)
+    # 학습후 변환
+    train_scaled = scaler.transform(data_for_scaling)
+    # 학습후 변환한 데이터를 다시 원래 데이터로 만들기
+    result = pd.DataFrame(train_scaled, columns = data_for_scaling.columns)
+    result = pd.concat([df[['id', "fiberID"]], result], axis=1)
+    return result
+```
 
-> sampling
+```
+#4가지방법으로 스케일링
+from sklearn.preprocessing import StandardScaler
+std_data, std_scaler = scaling_func(data, StandardScaler)
 
-종속변수인 type의 데이터 클래스가 불균형한 것으로 나타난다. 이처럼 데이터 클래스의 비율 차가 심하다면 단순히 우세한 클래스를 택하는 모형의 정확도가 높아져 모형의 성능 판별이 어려워지는 문제가 생길 수 있다. 이에 샘플링을 통해 비대칭 데이터를 다루었다.
+from sklearn.preprocessing import MinMaxScaler
+mm_data, mm_scaler = scaling_func(data, MinMaxScaler)
 
-- oversampling : 소수 클래스 데이터를 증가시키는 방법이다.
-- undersampling : 다수 클래스 데이터의 일부만 사용하는 방법이다.
+from sklearn.preprocessing import MaxAbsScaler
+ma_data, ma_scaler = scaling_func(data, MaxAbsScaler)
 
-앞서 시각화 파트에서 천체 type 별 데이터 개수를 비교해보았을 때 majority class와 minority class의 비율 차이가 극심한 것을 확인하였다. 때문에 oversampling을 통해 다수 클래스를 기준으로 소수 클래스 데이터를 증가시켜 균형을 맞춤으로써 데이터 손실을 줄이고자 하였다. 
+from sklearn.preprocessing import RobustScaler
+rb_data, rb_scaler= scaling_func(data, RobustScaler)
+
+#모델을 설정
+import catboost as cb
+cb_model_std = cb.CatBoostClassifier()
+cb_model_mm = cb.CatBoostClassifier()
+cb_model_ma = cb.CatBoostClassifier()
+cb_model_rb = cb.CatBoostClassifier()
+
+#독립변수,종속변수 설정
+X_std = std_data[data.columns[2:]]
+X_mm = mm_data[data.columns[2:]]
+X_ma = ma_data[data.columns[2:]]
+X_rb = rb_data[data.columns[2:]]
+
+y = data['type']
+
+#모델에 적용시키기
+cb_model_std.fit(X_std, y)
+cb_model_mm.fit(X_mm, y)
+cb_model_ma.fit(X_ma, y)
+cb_model_rb.fit(X_rb, y)
+
+```
+
+```
+    #df형식으로 만들기(submission file과 같은 column순서로)
+    id_for_index = df['id']
+    test = df[test_data.columns[1:]]
+    predictions = model.predict_proba(test)
+    result = pd.DataFrame(data=predictions, index=id_for_index, columns=model.classes_)
+    sample = pd.read_csv("./data/ybigta_sdss_sample_submission.csv")
+    col_order = sample.columns[1:]
+    result = result[col_order]
+    return result
+    
+    test_std = test_scaling_func(test_data, std_scaler)
+    test_mm = test_scaling_func(test_data, mm_scaler)
+    test_ma = test_scaling_func(test_data, ma_scaler)
+    test_rb = test_scaling_func(test_data, rb_scaler)
+    
+```
+
+```
+#csv형식으로 변환해서 저장
+
+make_submission(test_std, cb_model_std).to_csv('./result/std_cb.csv', sep=',')
+make_submission(test_mm, cb_model_mm).to_csv('./result/mm_cb.csv', sep=',')
+make_submission(test_ma, cb_model_ma).to_csv('./result/ma_cb.csv', sep=',')
+make_submission(test_rb, cb_model_rb).to_csv('./result/rb_cb.csv', sep=',')
+
+```
+
+결과:
+
+1) standardscaler : 0.4778
+
+2) minmaxscaler : 1.7
+
+3) maxabsscaler : 1.6
+
+4) robustscaler : 0.4778
+
+미세한 차이로 robustscaler로 처리했을 때 결과값이 나아지는 경향을 볼 수 있었다.
+
+-u계열 합치기
+
+u계열 변수가 서로 연관성이 높게 나왔기 때문에 합쳐서 전처리 해보기로 했다
+
+```
+#train,test data 쪼개기(전처리 없이)
+
+from sklearn.model_selection import train_test_split
+X = train.drop('type', axis = 1)
+y = train['type']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.2, random_state=42)
+
+#lightgbm으로 전처리 없이 돌려보기
+
+from lightgbm import LGBMClassifier
+lgbm_model = LGBMClassifier(boosting_type='gbdt', objective='binary', num_leaves=10,
+                                learning_rate=0.1, n_estimators=2000, max_depth=15,
+                                bagging_fraction=0.9, feature_fraction=0.9, reg_lambda=0.2)
+lgbm_model.fit(X_train,y_train)
+
+#전처리 없이 나오는 logloss
+from sklearn.metrics import log_loss
+y_pred_lgbm_prob = lgbm_model.predict_proba(X_test)
+log_loss(y_true=y_test, y_pred=y_pred_lgbm_prob)
+
+```
+
+결과:0.3874938355499263
+
+```
+#psfMag_u와 fiberMag_u 그리고 petroMag_u를 평균을 내서 하나의 변수로 만들기
+ultra = train.loc[:,['psfMag_u','fiberMag_u','petroMag_u']]
+train['average_ultra'] = ultra.apply(np.mean,axis=1)
+train['average_ultra'
+
+#평균 변수를 추가하고 기존 psfMag_u와 fiberMag_u 그리고 petroMag_u 변수 삭제하기
+X = pd.concat([X, train[['average_ultra']]], axis=1) 
+X = X.drop(['psfMag_u','fiberMag_u','petroMag_u'],axis=1)
+
+#LGBM 모델 구축하기
+
+from lightgbm import LGBMClassifier
+lgbm_model = LGBMClassifier(boosting_type='gbdt', objective='binary', num_leaves=10,
+                                learning_rate=0.1, n_estimators=2000, max_depth=15,
+                                bagging_fraction=0.9, feature_fraction=0.9, reg_lambda=0.2)
+lgbm_model.fit(X_train,y_train)
+
+#logloss을 측정하기
+from sklearn.metrics import log_loss
+y_pred_lgbm_prob = lgbm_model.predict_proba(X_test)
+log_loss(y_true=y_test, y_pred=y_pred_lgbm_prob)
+
+```
+
+결과: 0.38644079445636986
+
+결론적으로 u계열의 변수를 통합하여 처리하는게 모델 성능을 약간이라도 높일 수 있다는 결론이 나왔다.
 
 
 
-> oversampling
 
-oversampling 기법은 크게 3가지로 나뉜다.
-
-1. RandomOversampler : 소수의 클래스의 데이터를 반복해서 넣는 것이다. 가중치를 증가시키는 것과 비슷하다.
-2. ADASYN: 소수 클래스 데이터와 그 데이터에서 가장 가까운 k개의 소수 클래스 데이터 중 무작위로 선택된 데이터 사이의 직선상에 가상의 소수 클래스 데이터를 만드는 방법이다.
-3. SMOTE: ADASYN 방법과 유사하지만, 생성된 데이터를 무조건 소수 클래스로 두지 않고 분류 모형에 따라 분류한다.
