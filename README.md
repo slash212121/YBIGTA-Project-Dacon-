@@ -29,7 +29,7 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 
 ## 1. 변수의 의미 파악
 
-< type: 천체 유형으로 예측해야 하는 변수(종속변수) 
+> type: 천체 유형으로 예측해야 하는 변수(종속변수) 
 ```
   train=pd.read_csv('/content/gdrive/My Drive/train.csv')
   test=pd.read_csv('/content/gdrive/My Drive/test.csv')
@@ -58,7 +58,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ## 2. Training Data 시각화
 
-< type의 출현 빈도 파악
+> type의 출현 빈도 파악
 
 ```
   plt.figure(figsize=(12,8))
@@ -82,7 +82,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ![](https://github.com/sehyeona/ybigta-project/blob/master/visualization1.png)
 
-< 변수(feature)들의 분포
+> 변수(feature)들의 분포
 
 ```
 
@@ -146,7 +146,7 @@ for col in features :
 
 <br>
 
-< 천체타입에 의한 변수간의 상관관계
+> 천체타입에 의한 변수간의 상관관계
 
 ```
 for x in types:    
@@ -206,7 +206,7 @@ for x in types:
 
 ## 3. Training Data 전처리
 
-< 1. 스케일링
+> 1. 스케일링
 
 변수들간의 스케일이 대부분 맞기는 하지만 어느정도 아웃라이어가 존재하기도 하고 해보기 전까지 모르기 때문에 아래의 4가지 방법을 이용하여 스케일링 하였다
 
@@ -335,7 +335,7 @@ make_submission(test_rb, cb_model_rb).to_csv('./result/rb_cb.csv', sep=',')
 미세한 차이로 robustscaler로 처리했을 때 결과값이 나아지는 경향을 볼 수 있었다.
 
 
-< 상관관계 높은 변수 처리
+> 상관관계 높은 변수 처리
 
 -u계열 합치기
 
@@ -397,15 +397,15 @@ log_loss(y_true=y_test, y_pred=y_pred_lgbm_prob)
 
 # 4.training data 샘플링
 
-< sampling
+> sampling
 
--시각화 단계에서 타입의 개수에 큰 차이가 있음을 확인하였다.
+-시각화 단계에서 타입의 데이터 클래스 개수에 큰 차이가 있음을 확인하였다.
 
 -개수가 너무 작은 타입은 제대로 학습되지 않아 예측확률이 낮아지는 문제가 발생할 수 있다.
 
 -fiberID 는 사실상 카테고리 변수이지만, 시각화 단계에서 다른 변수들과 상관관계가 매우 낮음을 확인하였다.
 
--> 개수가 너무 적은 타입들의 개수를 늘려, 타입의 개수가 작은 변수에 대한 예측 정확도를 높일 수 있다고 판단
+-> oversampling을 통해 개수가 너무 적은 타입들의 개수를 늘려, 타입의 개수가 작은 변수에 대한 예측 정확도를 높일 수 있다고 판단
 
 ```
 import pandas as pd
