@@ -29,7 +29,7 @@ DACON에서 제공하는 천체 트레이닝 데이터를 활용하여 테스트
 
 ## 1. 변수의 의미 파악
 
--type: 천체 유형으로 예측해야 하는 변수(종속변수) 
+< type: 천체 유형으로 예측해야 하는 변수(종속변수) 
 ```
   train=pd.read_csv('/content/gdrive/My Drive/train.csv')
   test=pd.read_csv('/content/gdrive/My Drive/test.csv')
@@ -54,11 +54,11 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 -FiberID:관측에 사용된 광섬유의 구분자
 
--참고: u(ultraviolet), g(green), r(red), i,z(very-near-infrared)
+-참고: u(ultraviolet), g(green), r(red), i(near-infrared),z(very-near-infrared)
 
 ## 2. Training Data 시각화
 
--type의 출현 빈도 파악
+< type의 출현 빈도 파악
 
 ```
   plt.figure(figsize=(12,8))
@@ -82,7 +82,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ![](https://github.com/sehyeona/ybigta-project/blob/master/visualization1.png)
 
--변수(feature)들의 분포
+< 변수(feature)들의 분포
 
 ```
 
@@ -146,7 +146,7 @@ for col in features :
 
 <br>
 
--천체타입에 의한 변수간의 상관관계
+< 천체타입에 의한 변수간의 상관관계
 
 ```
 for x in types:    
@@ -206,19 +206,19 @@ for x in types:
 
 ## 3. Training Data 전처리
 
--스케일링
+< 1. 스케일링
 
 변수들간의 스케일이 대부분 맞기는 하지만 어느정도 아웃라이어가 존재하기도 하고 해보기 전까지 모르기 때문에 아래의 4가지 방법을 이용하여 스케일링 하였다
 
-종류
+-종류
 
--standardscaler : 정규분포 이용
+- standardscaler : 정규분포 이용
 
--minmaxscaler : 최대/최소값이 각각 0, 1
+- minmaxscaler : 최대/최소값이 각각 0, 1
 
--maxabsscaler : 최대절대값과 0이 각각 1, 0 이 되도록하는 scaling
+- maxabsscaler : 최대절대값과 0이 각각 1, 0 이 되도록하는 scaling
 
--robustscaler : median과 IQR 사용 outlier의 영향을 최소화 한다
+- robustscaler : median과 IQR 사용 outlier의 영향을 최소화 한다
 
 모든 스케일러는 sklearn.preprocessing 안에 각자 이름으로 들어있음
 
@@ -334,6 +334,9 @@ make_submission(test_rb, cb_model_rb).to_csv('./result/rb_cb.csv', sep=',')
 
 미세한 차이로 robustscaler로 처리했을 때 결과값이 나아지는 경향을 볼 수 있었다.
 
+
+< 상관관계 높은 변수 처리
+
 -u계열 합치기
 
 u계열 변수가 서로 연관성이 높게 나왔기 때문에 합쳐서 전처리 해보기로 했다
@@ -394,7 +397,7 @@ log_loss(y_true=y_test, y_pred=y_pred_lgbm_prob)
 
 # 4.training data 샘플링
 
-sampling
+< sampling
 
 -시각화 단계에서 타입의 개수에 큰 차이가 있음을 확인하였다.
 
