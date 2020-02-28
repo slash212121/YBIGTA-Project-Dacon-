@@ -82,7 +82,7 @@ array(['QSO', 'STAR_RED_DWARF', 'SERENDIPITY_BLUE', 'STAR_BHB',
 
 ![](https://github.com/sehyeona/ybigta-project/blob/master/visualization1.png)
 
--변수(feature)들의 분포
+> 변수(feature)들의 분포
 
 ```
 
@@ -146,7 +146,7 @@ for col in features :
 
 <br>
 
--천체타입에 의한 변수간의 상관관계
+> 천체타입에 의한 변수간의 상관관계
 
 ```
 for x in types:    
@@ -206,11 +206,11 @@ for x in types:
 
 ## 3. Training Data 전처리
 
--스케일링
+> 스케일링
 
 변수들간의 스케일이 대부분 맞기는 하지만 어느정도 아웃라이어가 존재하기도 하고 해보기 전까지 모르기 때문에 아래의 4가지 방법을 이용하여 스케일링 하였다
 
-종류
+> 종류
 
 -standardscaler : 정규분포 이용
 
@@ -243,7 +243,7 @@ def scaling_func(df, scaler) :
 
 ## 4. Training Data 샘플링
 
--sampling
+> sampling
 
 종속변수인 type의 데이터 클래스가 불균형한 것으로 나타난다. 이처럼 데이터 클래스의 비율 차가 심하다면 단순히 우세한 클래스를 택하는 모형의 정확도가 높아져 모형의 성능 판별이 어려워지는 문제가 생길 수 있다. 이에 샘플링을 통해 비대칭 데이터를 다루었다.
 
@@ -254,7 +254,7 @@ def scaling_func(df, scaler) :
 
 
 
--oversampling
+> oversampling
 
 oversampling 기법은 크게 3가지로 나뉜다.
 
