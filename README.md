@@ -206,3 +206,37 @@ for x in types:
 
 ## 3. Training Data 전처리
 
+-스케일링
+
+변수들간의 스케일이 대부분 맞기는 하지만 어느정도 아웃라이어가 존재하기도 하고 해보기 전까지 모르기 때문에 아래의 4가지 방법을 이용하여 스케일링 하였다
+
+종류
+
+-standardscaler : 정규분포 이용
+
+-minmaxscaler : 최대/최소값이 각각 0, 1
+
+-maxabsscaler : 최대절대값과 0이 각각 1, 0 이 되도록하는 scaling
+
+-robustscaler : median과 IQR 사용 outlier의 영향을 최소화 한다
+
+모든 스케일러는 sklearn.preprocessing 안에 각자 이름으로 들어있음
+
+```
+def scaling_func(df, scaler) :
+    '''
+    param : dataframe / scaler object
+    return : scaled dataframe / fitting scaler
+    '''
+    scaler = scaler()
+    # type과 id를 제외하고 학습
+    data_for_scaling = df.drop(['id', 'type', 'fiberID'], axis = 1)
+    scaler.fit(data_for_scaling)
+    # 학습후 변환
+    train_scaled = scaler.transform(data_for_scaling)
+    # 학습후 변환한 데이터를 다시 원래 데이터로 만들기
+    result = pd.DataFrame(train_scaled, columns = data_for_scaling.columns)
+    result = pd.concat([df[['id','type', "fiberID"]], result], axis=1)
+    return result, scaler
+    
+```
